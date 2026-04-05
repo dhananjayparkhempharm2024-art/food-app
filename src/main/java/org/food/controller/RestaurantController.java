@@ -5,9 +5,12 @@ import java.util.List;
 import org.food.dto.restaurant.DeliveryManRequest;
 import org.food.dto.restaurant.MenuItemRequest;
 import org.food.dto.restaurant.RestaurantRequest;
+import org.food.dto.admin.OrderHistoryDTO;
+import org.food.dto.order.RestaurantTransactionSummaryDTO;
 import org.food.entity.MenuItem;
 import org.food.entity.Restaurant;
 import org.food.entity.User;
+import org.food.service.OrderService;
 import org.food.service.RestaurantService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.http.HttpStatus;
@@ -28,9 +31,11 @@ import jakarta.validation.Valid;
 public class RestaurantController {
 
     private final RestaurantService restaurantService;
+    private final OrderService orderService;
 
-    public RestaurantController(RestaurantService restaurantService) {
+    public RestaurantController(RestaurantService restaurantService, OrderService orderService) {
         this.restaurantService = restaurantService;
+        this.orderService = orderService;
     }
 
     @GetMapping
@@ -47,6 +52,24 @@ public class RestaurantController {
     @PreAuthorize("hasAnyRole('RESTAURANT','ADMIN','SYSTEM_ADMIN')")
     public Restaurant updateMyRestaurant(@Valid @RequestBody RestaurantRequest request) {
         return restaurantService.updateMyRestaurant(request);
+    }
+
+    @GetMapping("/me")
+    @PreAuthorize("hasRole('RESTAURANT')")
+    public Restaurant getMyRestaurant() {
+        return restaurantService.getMyRestaurant();
+    }
+
+    @GetMapping("/me/orders")
+    @PreAuthorize("hasRole('RESTAURANT')")
+    public List<OrderHistoryDTO> myRestaurantOrders() {
+        return orderService.myRestaurantOrders();
+    }
+
+    @GetMapping("/me/transactions")
+    @PreAuthorize("hasRole('RESTAURANT')")
+    public RestaurantTransactionSummaryDTO myRestaurantTransactions() {
+        return orderService.myRestaurantTransactions();
     }
 
     @PostMapping("/{restaurantId}/menu-items")
@@ -77,6 +100,12 @@ public class RestaurantController {
     public ResponseEntity<User> registerDeliveryMan(@PathVariable Long restaurantId,
                                                     @Valid @RequestBody DeliveryManRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(restaurantService.registerDeliveryMan(restaurantId, request));
+    }
+
+    @GetMapping("/{restaurantId}/delivery-men")
+    @PreAuthorize("hasAnyRole('RESTAURANT','ADMIN','SYSTEM_ADMIN')")
+    public List<User> getDeliveryMen(@PathVariable Long restaurantId) {
+        return restaurantService.getDeliveryMen(restaurantId);
     }
 }
 

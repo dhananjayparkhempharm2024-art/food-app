@@ -2,16 +2,14 @@ import { useContext, useMemo } from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { Auth } from './context/AuthContext';
 import { adminRoutes } from './routes/adminRoutes';
+import { customerRoutes } from './routes/CustomerRoutes';
 import { publicRoutes } from './routes/publicRoutes';
+import { restaurantRoutes } from './routes/restaurantRoutes';
 
 const App = () => {
   const { user } = useContext(Auth);
 
-  // 1. Extract Role safely from the authorities array
-  // We check for user.authorities[0] based on your JSON structure
-  const rawRole = user?.authorities?.[0] || "GUEST";
-  
-  // Clean it up: Remove "ROLE_" so we can check for "SYSTEM_ADMIN" or "ADMIN"
+  const rawRole = user?.authorities?.[0] || user?.role || "GUEST";
   const role = rawRole.replace("ROLE_", "");
 
   console.log("Logged in as:", role);
@@ -23,13 +21,17 @@ const App = () => {
     if (!user) {
       activeRoutes = publicRoutes;
     } 
-    // Matches "SYSTEM_ADMIN" or "ADMIN" after the .replace() fix above
     else if (role === "SYSTEM_ADMIN" || role === "ADMIN") {
       activeRoutes = adminRoutes;
-    } 
+    }
+    else if (role === "RESTAURANT") {
+      activeRoutes = restaurantRoutes;
+    }
+    else if (role === "CUSTOMER") {
+      activeRoutes = customerRoutes;
+    }
     else {
-      // Fallback for Customers or unrecognized roles
-      activeRoutes = publicRoutes; 
+      activeRoutes = publicRoutes;
     }
 
     return createBrowserRouter(activeRoutes);

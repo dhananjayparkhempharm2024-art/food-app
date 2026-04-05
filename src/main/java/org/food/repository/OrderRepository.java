@@ -20,6 +20,10 @@ public interface OrderRepository extends JpaRepository<CustomerOrder, Long> {
             "from CustomerOrder o join o.customer c join o.restaurant r order by o.createdAt desc")
     List<OrderHistoryDTO> findAllOrderHistory();
 
+    @Query("select new org.food.dto.admin.OrderHistoryDTO(o.id, c.fullName, r.name, o.totalAmount, o.status, o.createdAt) " +
+            "from CustomerOrder o join o.customer c join o.restaurant r where r.id = :restaurantId order by o.createdAt desc")
+    List<OrderHistoryDTO> findRestaurantOrderHistory(Long restaurantId);
+
     @Query("select sum(o.totalAmount) from CustomerOrder o")
     BigDecimal sumTotalRevenue();
 }

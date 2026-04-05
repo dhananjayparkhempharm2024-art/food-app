@@ -51,6 +51,20 @@ public class RestaurantService {
                 .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found"));
     }
 
+    public Restaurant getMyRestaurant() {
+        User currentUser = currentUserService.getCurrentUser();
+        if (currentUser.getRole() != Role.RESTAURANT) {
+            throw new ForbiddenException("Only restaurant owners can access this resource");
+        }
+        return restaurantRepository.findByOwnerId(currentUser.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant profile not found"));
+    }
+
+    public List<User> getDeliveryMen(Long restaurantId) {
+        Restaurant restaurant = getManageableRestaurant(restaurantId);
+        return userRepository.findByRestaurantIdAndRole(restaurant.getId(), Role.DELIVERY_MAN);
+    }
+
     public List<MenuItem> getPublicMenu(Long restaurantId) {
         Restaurant restaurant = getRestaurant(restaurantId);
         if (restaurant.getStatus() != RestaurantStatus.APPROVED) {

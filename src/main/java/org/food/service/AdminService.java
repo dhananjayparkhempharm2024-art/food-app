@@ -113,6 +113,7 @@ public class AdminService {
         settings.setSiteName(request.siteName());
         settings.setMaintenanceMode(request.maintenanceMode());
         settings.setBaseDeliveryFee(request.baseDeliveryFee());
+        settings.setMinOrderValue(request.minOrderValue());
         settings.setAdminEmail(request.adminEmail());
         return toSystemSettingsDTO(systemSettingRepository.save(settings));
     }
@@ -257,6 +258,7 @@ public class AdminService {
                 settings.getSiteName(),
                 settings.isMaintenanceMode(),
                 settings.getBaseDeliveryFee(),
+                settings.getMinOrderValue(),
                 settings.getAdminEmail());
     }
 
@@ -265,6 +267,7 @@ public class AdminService {
         settings.setSiteName("FoodExpress");
         settings.setMaintenanceMode(false);
         settings.setBaseDeliveryFee(new BigDecimal("30.00"));
+        settings.setMinOrderValue(new BigDecimal("0.00"));
         settings.setAdminEmail("admin@foodexpress.com");
         return systemSettingRepository.save(settings);
     }

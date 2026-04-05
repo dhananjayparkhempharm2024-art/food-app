@@ -50,6 +50,9 @@ public class CustomerOrder extends BaseEntity {
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal totalAmount = BigDecimal.ZERO;
 
+    @Column(nullable = false)
+    private String paymentMode = "PAY_ON_DELIVERY";
+
     private String deliveryAddress;
 
     @OneToMany(mappedBy = "order", orphanRemoval = true)

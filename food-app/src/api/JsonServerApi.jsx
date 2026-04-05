@@ -1,19 +1,38 @@
 import api from "./axiosInstance";
 
-// --- AUTHENTICATION ---import api from "./axiosInstance";
-
-// --- 1. AUTHENTICATION ---
+// --- AUTHENTICATION ---
 export const login = async (credentials) => {
   return api.post("/api/auth/login", credentials);
 };
 
 export const register = async (path, userData) => {
-  // path is dynamically: "/api/auth/register/customer" or "/api/auth/register/restaurant"
   return api.post(path, userData);
 };
 
+// --- CUSTOMER ---
+export const getRestaurants = () => api.get("/api/restaurants");
+export const getRestaurantMenu = (restaurantId) => api.get(`/api/restaurants/${restaurantId}/menu`);
+export const getCart = () => api.get("/api/cart");
+export const addToCart = (payload) => api.post("/api/cart/items", payload);
+export const removeCartItem = (cartItemId) => api.delete(`/api/cart/items/${cartItemId}`);
+export const clearCart = () => api.delete("/api/cart/clear");
+export const checkout = (payload) => api.post("/api/orders/checkout", payload);
+export const getMyOrders = () => api.get("/api/orders/my");
 
-// --- 2. DASHBOARD & USERS ---
+// --- RESTAURANT ---
+export const getMyRestaurant = () => api.get("/api/restaurants/me");
+export const updateMyRestaurant = (payload) => api.put("/api/restaurants/me", payload);
+export const addMenuItem = (restaurantId, payload) => api.post(`/api/restaurants/${restaurantId}/menu-items`, payload);
+export const updateMenuItem = (restaurantId, menuItemId, payload) =>
+  api.put(`/api/restaurants/${restaurantId}/menu-items/${menuItemId}`, payload);
+export const deleteMenuItem = (restaurantId, menuItemId) =>
+  api.delete(`/api/restaurants/${restaurantId}/menu-items/${menuItemId}`);
+export const getRestaurantOrders = () => api.get("/api/restaurants/me/orders");
+export const getRestaurantTransactions = () => api.get("/api/restaurants/me/transactions");
+export const getDeliveryMen = (restaurantId) => api.get(`/api/restaurants/${restaurantId}/delivery-men`);
+export const addDeliveryMan = (restaurantId, payload) => api.post(`/api/restaurants/${restaurantId}/delivery-men`, payload);
+
+// --- ADMIN ---
 export const getAdminDashboard = () => {
   return api.get("/api/admin/dashboard");
 };
@@ -79,36 +98,4 @@ export const getSystemSettings = () => {
 export const updateSystemSettings = (settingsData) => {
   return api.put("/api/admin/settings", settingsData);
 };
-/*
 
-Auth
-POST /api/auth/register/customer
-POST /api/auth/register/restaurant
-POST /api/auth/login
-Public browsing
-GET /api/restaurants
-GET /api/restaurants/{restaurantId}/menu
-Customer cart
-GET /api/cart
-POST /api/cart/items
-DELETE /api/cart/items/{cartItemId}
-DELETE /api/cart/clear
-Orders
-POST /api/orders/checkout
-GET /api/orders/my
-GET /api/orders/restaurant/{restaurantId}
-Restaurant management
-PUT /api/restaurants/me
-POST /api/restaurants/{restaurantId}/menu-items
-PUT /api/restaurants/{restaurantId}/menu-items/{menuItemId}
-DELETE /api/restaurants/{restaurantId}/menu-items/{menuItemId}
-POST /api/restaurants/{restaurantId}/delivery-men
-Admin
-GET /api/admin/users
-GET /api/admin/restaurants
-POST /api/admin/restaurants/{restaurantId}/approve
-POST /api/admin/restaurants/{restaurantId}/reject
-PUT /api/admin/users/{userId}/role
-PUT /api/admin/users/{userId}/enabled
-
-*/

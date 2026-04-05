@@ -30,6 +30,9 @@ public class SystemSetting extends BaseEntity {
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal baseDeliveryFee;
 
+    @Column(nullable = false, precision = 12, scale = 2)
+    private BigDecimal minOrderValue;
+
     @Column(nullable = false)
     private String adminEmail;
 }
