@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { getMyOrders } from "../../api/JsonServerApi";
 
 const CustomerOrdersPage = () => {
@@ -6,8 +7,14 @@ const CustomerOrdersPage = () => {
 
   useEffect(() => {
     const run = async () => {
-      const response = await getMyOrders();
-      setOrders(response.data || []);
+      try {
+        const response = await getMyOrders();
+        const payload = response.data?.data ?? response.data;
+        setOrders(Array.isArray(payload) ? payload : []);
+      } catch (error) {
+        setOrders([]);
+        toast.error(error.response?.data?.message || "Unable to load orders");
+      }
     };
     run();
   }, []);
