@@ -43,26 +43,63 @@ const RestaurantDeliveryMenPage = () => {
       toast.error(error.response?.data?.message || "Unable to add delivery man");
     }
   };
-
   return (
-    <div>
-      <h2>Delivery Men</h2>
-      <form onSubmit={handleSubmit} style={{ display: "grid", gap: 8, maxWidth: 420, marginBottom: 20 }}>
-        <input placeholder="Full name" value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })} required />
-        <input placeholder="Email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
-        <input placeholder="Password" type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required />
-        <input placeholder="Phone" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} required />
-        <button type="submit">Add Delivery Man</button>
-      </form>
+    <div className="delivery-mgmt-container">
+      <h2 className="delivery-title">Delivery Personnel</h2>
 
-      {deliveryMen.map((man) => (
-        <div key={man.id} style={{ borderBottom: "1px solid #e5e7eb", padding: "8px 0" }}>
-          {man.fullName} - {man.email} - {man.phone}
-        </div>
-      ))}
+      <div className="onboarding-card">
+        <h3>Register New Delivery Partner</h3>
+        <form onSubmit={handleSubmit} className="delivery-form">
+          <input
+            placeholder="Full Name"
+            value={form.fullName}
+            onChange={(e) => setForm({ ...form, fullName: e.target.value })}
+            required
+          />
+          <input
+            placeholder="Email Address"
+            type="email"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            required
+          />
+          <input
+            placeholder="Secure Password"
+            type="password"
+            value={form.password}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            required
+          />
+          <input
+            placeholder="Phone Number"
+            value={form.phone}
+            onChange={(e) => setForm({ ...form, phone: e.target.value })}
+            required
+          />
+          <button type="submit" className="add-staff-btn">Add Delivery Man</button>
+        </form>
+      </div>
+
+      <div className="staff-list">
+        {deliveryMen.map((man) => (
+          <div key={man.id} className="staff-row">
+            <div className="staff-info">
+              <span className="staff-name">{man.fullName}</span>
+              <div className="staff-contact">
+                <span>{man.email}</span>
+                <span className="phone-badge">{man.phone}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+        {deliveryMen.length === 0 && (
+          <p style={{ textAlign: 'center', padding: '2rem', color: '#a0aec0' }}>
+            No delivery personnel registered yet.
+          </p>
+        )}
+      </div>
     </div>
   );
 };
-
 export default RestaurantDeliveryMenPage;
 

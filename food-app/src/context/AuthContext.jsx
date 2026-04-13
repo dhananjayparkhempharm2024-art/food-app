@@ -29,6 +29,7 @@ const AuthContext = ({ children }) => {
     const logoutUser = () => {
         setUser(null);
         localStorage.removeItem("user");
+        window.location.href = "/"; 
     };
 
     return (
