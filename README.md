@@ -1,80 +1,72 @@
-# Food Service Backend
+# Food Delivery Monorepo
 
-Spring Boot backend for a food ordering platform with JWT authentication and role-based authorization.
+Production-style monorepo for a food delivery platform with:
 
-## Implemented roles
-- `SYSTEM_ADMIN` — highest privilege, bootstrap account
+- Spring Boot backend (JWT + role-based access)
+- React + Vite frontend admin/customer/restaurant apps
+
+## Repository Structure
+
+```text
+food/
+  src/                 # Spring Boot backend source
+  food-app/            # React frontend app
+  docs/                # Project documentation and standards
+  README2.md           # Legacy API JSON examples (kept for compatibility)
+```
+
+Detailed structure and conventions: `docs/PROJECT_STRUCTURE.md`
+
+## Quick Start
+
+### 1) Backend
+
+```powershell
+cd C:\Users\Shubham Mokode\Desktop\Customers\customProject2\food
+.\mvnw.cmd spring-boot:run
+```
+
+Backend default URL: `http://localhost:8082`
+
+### 2) Frontend
+
+```powershell
+cd C:\Users\Shubham Mokode\Desktop\Customers\customProject2\food\food-app
+npm install
+npm run dev
+```
+
+Frontend default URL: `http://localhost:5173`
+
+## Validation Commands
+
+```powershell
+cd C:\Users\Shubham Mokode\Desktop\Customers\customProject2\food
+.\mvnw.cmd test
+```
+
+```powershell
+cd C:\Users\Shubham Mokode\Desktop\Customers\customProject2\food\food-app
+npm run build
+```
+
+## Roles
+
+- `SYSTEM_ADMIN`
 - `ADMIN`
 - `RESTAURANT`
-- `CUSTOMER`
 - `DELIVERY_MAN`
+- `CUSTOMER`
 
-## Implemented features
-- Public customer registration
-- Public restaurant registration with pending approval
-- Public login with JWT bearer token
-- Public restaurant browsing
-- Public restaurant menu browsing
-- Customer cart management
-- Customer checkout to create orders
-- Restaurant menu management
-- Restaurant delivery-man registration
-- Admin restaurant approval/rejection
-- Admin user role/status management
+## Documentation Map
 
-## Main endpoints
-### Auth
-- `POST /api/auth/register/customer`
-- `POST /api/auth/register/restaurant`
-- `POST /api/auth/login`
-
-### Public browsing
-- `GET /api/restaurants`
-- `GET /api/restaurants/{restaurantId}/menu`
-
-### Customer cart
-- `GET /api/cart`
-- `POST /api/cart/items`
-- `DELETE /api/cart/items/{cartItemId}`
-- `DELETE /api/cart/clear`
-
-### Orders
-- `POST /api/orders/checkout`
-- `GET /api/orders/my`
-- `GET /api/orders/restaurant/{restaurantId}`
-
-### Restaurant management
-- `PUT /api/restaurants/me`
-- `POST /api/restaurants/{restaurantId}/menu-items`
-- `PUT /api/restaurants/{restaurantId}/menu-items/{menuItemId}`
-- `DELETE /api/restaurants/{restaurantId}/menu-items/{menuItemId}`
-- `POST /api/restaurants/{restaurantId}/delivery-men`
-
-### Admin
-- `GET /api/admin/users`
-- `GET /api/admin/restaurants`
-- `POST /api/admin/restaurants/{restaurantId}/approve`
-- `POST /api/admin/restaurants/{restaurantId}/reject`
-- `PUT /api/admin/users/{userId}/role`
-- `PUT /api/admin/users/{userId}/enabled`
-
-## Local run
-```powershell
-./mvnw.cmd spring-boot:run
-```
-
-## Test
-```powershell
-./mvnw.cmd test
-```
-
-## Default bootstrap system admin
-Configured in `src/main/resources/application.properties`.
-
-- Email: `system.admin@food.local`
-- Password: `ChangeMe123!`
+- Project layout and naming conventions: `docs/PROJECT_STRUCTURE.md`
+- Development workflow and standards: `docs/DEVELOPMENT.md`
+- Frontend-specific setup: `food-app/README.md`
+- API JSON examples (legacy): `README2.md`
 
 ## Notes
-- JWT secret and bootstrap credentials should be changed before production use.
-- H2 is configured for local development and testing.
+
+- Keep secrets and bootstrap credentials in local environment configuration; do not commit production credentials.
+- Delivery flow UI/API is currently partial and tracked as ongoing work.
 

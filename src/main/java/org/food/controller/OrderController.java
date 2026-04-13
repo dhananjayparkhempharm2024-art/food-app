@@ -3,9 +3,9 @@ package org.food.controller;
 import java.util.List;
 
 import org.food.dto.order.CheckoutRequest;
+import org.food.dto.order.CustomerOrderDTO;
 import org.food.entity.CustomerOrder;
 import org.food.service.OrderService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +34,7 @@ public class OrderController {
 
     @GetMapping("/my")
     @PreAuthorize("hasRole('CUSTOMER')")
-    public List<CustomerOrder> myOrders() {
+    public List<CustomerOrderDTO> myOrders() {
         return orderService.myOrders();
     }
 

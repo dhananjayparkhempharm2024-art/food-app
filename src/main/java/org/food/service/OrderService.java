@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.food.dto.admin.OrderHistoryDTO;
 import org.food.dto.order.CheckoutRequest;
+import org.food.dto.order.CustomerOrderDTO;
 import org.food.dto.order.RestaurantTransactionSummaryDTO;
 import org.food.entity.Cart;
 import org.food.entity.CartItem;
@@ -83,12 +84,12 @@ public class OrderService {
         return saved;
     }
 
-    public List<CustomerOrder> myOrders() {
+    public List<CustomerOrderDTO> myOrders() {
         User current = currentUserService.getCurrentUser();
-        if (current.getRole() != Role.CUSTOMER && current.getRole() != Role.RESTAURANT && current.getRole() != Role.ADMIN && current.getRole() != Role.SYSTEM_ADMIN) {
-            throw new ForbiddenException("Not allowed");
+        if (current.getRole() != Role.CUSTOMER) {
+            throw new ForbiddenException("Only customers can view their orders");
         }
-        return orderRepository.findByCustomerId(current.getId());
+        return orderRepository.findCustomerOrderSummaries(current.getId());
     }
 
     public List<CustomerOrder> restaurantOrders(Long restaurantId) {
