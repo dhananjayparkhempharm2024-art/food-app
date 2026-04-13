@@ -1,7 +1,7 @@
 package org.food.controller;
 
+import org.food.dto.cart.CartDTO;
 import org.food.dto.cart.CartItemRequest;
-import org.food.entity.Cart;
 import org.food.service.CartService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,17 +27,17 @@ public class CartController {
     }
 
     @GetMapping
-    public Cart getMyCart() {
+    public CartDTO getMyCart() {
         return cartService.getMyCart();
     }
 
     @PostMapping("/items")
-    public Cart addItem(@Valid @RequestBody CartItemRequest request) {
+    public CartDTO addItem(@Valid @RequestBody CartItemRequest request) {
         return cartService.addItem(request);
     }
 
     @DeleteMapping("/items/{cartItemId}")
-    public Cart removeItem(@PathVariable Long cartItemId) {
+    public CartDTO removeItem(@PathVariable Long cartItemId) {
         return cartService.removeItem(cartItemId);
     }
 

@@ -1,7 +1,11 @@
 package org.food.service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
+import org.food.dto.cart.CartDTO;
+import org.food.dto.cart.CartItemDTO;
+import org.food.dto.cart.CartMenuItemDTO;
 import org.food.dto.cart.CartItemRequest;
 import org.food.entity.Cart;
 import org.food.entity.CartItem;
@@ -37,13 +41,14 @@ public class CartService {
         this.currentUserService = currentUserService;
     }
 
-    public Cart getMyCart() {
+    @Transactional
+    public CartDTO getMyCart() {
         User customer = requireCustomer();
-        return getOrCreateCart(customer);
+        return toDto(getOrCreateCart(customer));
     }
 
     @Transactional
-    public Cart addItem(CartItemRequest request) {
+    public CartDTO addItem(CartItemRequest request) {
         User customer = requireCustomer();
         Cart cart = getOrCreateCart(customer);
         MenuItem menuItem = menuItemRepository.findById(request.menuItemId())
@@ -66,11 +71,11 @@ public class CartService {
         cartItem.setLineTotal(menuItem.getPrice().multiply(BigDecimal.valueOf(request.quantity())));
         cart.getItems().removeIf(item -> item.getMenuItem().getId().equals(menuItem.getId()));
         cart.getItems().add(cartItem);
-        return cartRepository.save(cart);
+        return toDto(cartRepository.save(cart));
     }
 
     @Transactional
-    public Cart removeItem(Long cartItemId) {
+    public CartDTO removeItem(Long cartItemId) {
         User customer = requireCustomer();
         Cart cart = getOrCreateCart(customer);
         CartItem cartItem = cartItemRepository.findById(cartItemId)
@@ -80,15 +85,15 @@ public class CartService {
         }
         cart.getItems().remove(cartItem);
         cartItemRepository.delete(cartItem);
-        return cartRepository.save(cart);
+        return toDto(cartRepository.save(cart));
     }
 
     @Transactional
-    public Cart clearCart() {
+    public void clearCart() {
         User customer = requireCustomer();
         Cart cart = getOrCreateCart(customer);
         cart.getItems().clear();
-        return cartRepository.save(cart);
+        cartRepository.save(cart);
     }
 
     public Cart getOrCreateCart(User customer) {
@@ -106,6 +111,31 @@ public class CartService {
             throw new ForbiddenException("Only customers can use the cart");
         }
         return current;
+    }
+
+    private CartDTO toDto(Cart cart) {
+        List<CartItemDTO> items = cart.getItems().stream()
+                .map(this::toDto)
+                .toList();
+        BigDecimal totalAmount = items.stream()
+                .map(item -> item.lineTotal() == null ? BigDecimal.ZERO : item.lineTotal())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        return new CartDTO(cart.getId(), cart.isCheckedOut(), items, totalAmount);
+    }
+
+    private CartItemDTO toDto(CartItem item) {
+        MenuItem menuItem = item.getMenuItem();
+        return new CartItemDTO(
+                item.getId(),
+                new CartMenuItemDTO(
+                        menuItem.getId(),
+                        menuItem.getName(),
+                        menuItem.getDescription(),
+                        menuItem.getPrice(),
+                        menuItem.isAvailable()),
+                item.getQuantity(),
+                item.getUnitPrice(),
+                item.getLineTotal());
     }
 }
 

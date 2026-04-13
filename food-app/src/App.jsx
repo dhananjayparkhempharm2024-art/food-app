@@ -4,6 +4,7 @@ import { Auth } from './context/AuthContext';
 import { adminRoutes } from './routes/adminRoutes';
 import { customerRoutes } from './routes/CustomerRoutes';
 import { publicRoutes } from './routes/publicRoutes';
+import { deliveryRoutes } from './routes/deliveryRoutes';
 import { restaurantRoutes } from './routes/restaurantRoutes';
 
 const App = () => {
@@ -26,6 +27,9 @@ const App = () => {
     }
     else if (role === "RESTAURANT") {
       activeRoutes = restaurantRoutes;
+    }
+    else if (role === "DELIVERY_MAN") {
+      activeRoutes = deliveryRoutes;
     }
     else if (role === "CUSTOMER") {
       activeRoutes = customerRoutes;
