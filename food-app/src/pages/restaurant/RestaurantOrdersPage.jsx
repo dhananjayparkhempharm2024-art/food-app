@@ -11,19 +11,39 @@ const RestaurantOrdersPage = () => {
     };
     run();
   }, []);
-
-  return (
-    <div>
-      <h2>Restaurant Orders</h2>
-      {orders.map((order) => (
-        <div key={order.id} style={{ borderBottom: "1px solid #e5e7eb", padding: "8px 0" }}>
-          <strong>#{order.id}</strong> - {order.customerName} - Rs. {order.totalAmount} - {order.status}
+return (
+    <div className="orders-mgmt-container">
+      <h2 className="orders-mgmt-title">Order Management</h2>
+      
+      {orders.length > 0 ? (
+        <>
+          <div className="orders-list-header">
+            <span>ID</span>
+            <span>Customer</span>
+            <span>Total</span>
+            <span>Status</span>
+          </div>
+          
+          {orders.map((order) => (
+            <div key={order.id} className="order-row">
+              <span className="order-id-cell">#{order.id}</span>
+              <span className="customer-name-cell">{order.customerName}</span>
+              <span className="amount-cell">Rs. {order.totalAmount}</span>
+              <div className="status-cell">
+                <span className={`status-pill status-${order.status}`}>
+                  {order.status}
+                </span>
+              </div>
+            </div>
+          ))}
+        </>
+      ) : (
+        <div className="no-orders-msg">
+          <p>No orders currently in the queue.</p>
         </div>
-      ))}
-      {orders.length === 0 && <p>No orders available.</p>}
+      )}
     </div>
   );
 };
-
 export default RestaurantOrdersPage;
 

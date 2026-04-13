@@ -12,23 +12,40 @@ const RestaurantsPage = () => {
     };
     run();
   }, []);
-
   return (
-    <div>
-      <h2>Available Restaurants</h2>
-      <div style={{ display: "grid", gap: 12 }}>
+    <div className="restaurants-container">
+      <h2 className="restaurants-header">Explore Restaurants</h2>
+
+      <div className="restaurants-grid">
         {restaurants.map((restaurant) => (
-          <div key={restaurant.id} style={{ border: "1px solid #e5e7eb", padding: 12, borderRadius: 8 }}>
-            <h3 style={{ margin: 0 }}>{restaurant.name}</h3>
-            <p style={{ margin: "8px 0" }}>{restaurant.description}</p>
-            <p style={{ margin: "8px 0", color: "#6b7280" }}>{restaurant.address}</p>
-            <Link to={`/restaurants/${restaurant.id}`}>View Menu</Link>
+          <div key={restaurant.id} className="restaurant-card">
+            <h3 className="restaurant-name">{restaurant.name}</h3>
+
+            <p className="restaurant-description">
+              {restaurant.description}
+            </p>
+
+            <p className="restaurant-address">
+              📍 {restaurant.address}
+            </p>
+
+            <Link
+              to={`/restaurants/${restaurant.id}`}
+              className="view-menu-link"
+            >
+              View Menu
+            </Link>
           </div>
         ))}
       </div>
+
+      {restaurants.length === 0 && (
+        <p style={{ textAlign: 'center', color: '#9ca3af', marginTop: '3rem' }}>
+          Searching for nearby kitchens...
+        </p>
+      )}
     </div>
   );
 };
-
 export default RestaurantsPage;
 

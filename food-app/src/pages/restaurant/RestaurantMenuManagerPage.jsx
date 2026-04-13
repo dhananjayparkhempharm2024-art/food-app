@@ -72,30 +72,63 @@ const RestaurantMenuManagerPage = () => {
     await deleteMenuItem(restaurantId, itemId);
     await loadMenu(restaurantId);
   };
-
-  return (
-    <div>
-      <h2>Menu Management</h2>
-      <form onSubmit={handleCreate} style={{ display: "grid", gap: 8, maxWidth: 460, marginBottom: 20 }}>
-        <input placeholder="Dish name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
-        <input placeholder="Description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
-        <input placeholder="Price" type="number" min="1" step="0.01" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} required />
-        <input placeholder="Category" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} />
-        <button type="submit">Add Dish</button>
+return (
+    <div className="menu-manager-container">
+      <h2 className="manager-title">Menu Management</h2>
+      
+      <form onSubmit={handleCreate} className="add-item-form">
+        <input 
+          placeholder="Dish name" 
+          value={form.name} 
+          onChange={(e) => setForm({ ...form, name: e.target.value })} 
+          required 
+        />
+        <input 
+          placeholder="Category (e.g. Starter)" 
+          value={form.category} 
+          onChange={(e) => setForm({ ...form, category: e.target.value })} 
+        />
+        <input 
+          placeholder="Price" 
+          type="number" 
+          value={form.price} 
+          onChange={(e) => setForm({ ...form, price: e.target.value })} 
+          required 
+        />
+        <input 
+          placeholder="Short description" 
+          value={form.description} 
+          onChange={(e) => setForm({ ...form, description: e.target.value })} 
+        />
+        <button type="submit">Add to Menu</button>
       </form>
 
-      {items.map((item) => (
-        <div key={item.id} style={{ borderBottom: "1px solid #e5e7eb", padding: "8px 0" }}>
-          <strong>{item.name}</strong> - Rs. {item.price} - {item.available ? "Available" : "Unavailable"}
-          <button style={{ marginLeft: 10 }} onClick={() => toggleAvailability(item)}>
-            {item.available ? "Mark Unavailable" : "Mark Available"}
-          </button>
-          <button style={{ marginLeft: 10 }} onClick={() => handleDelete(item.id)}>Delete</button>
-        </div>
-      ))}
+      <div className="inventory-list">
+        {items.map((item) => (
+          <div key={item.id} className="inventory-item">
+            <div className="item-main-info">
+              <div className="item-name-row">
+                <div className={`status-indicator ${item.available ? 'status-online' : 'status-offline'}`} />
+                <strong>{item.name}</strong>
+              </div>
+              <span className="item-price-tag">Rs. {item.price} • {item.category}</span>
+            </div>
+            
+            <div className="item-actions">
+              <button className="action-btn toggle-btn" onClick={() => toggleAvailability(item)}>
+                {item.available ? "Disable" : "Enable"}
+              </button>
+              <button className="action-btn delete-btn" onClick={() => handleDelete(item.id)}>
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      {items.length === 0 && <p className="no-orders-msg">Your menu is empty.</p>}
     </div>
   );
 };
-
 export default RestaurantMenuManagerPage;
 

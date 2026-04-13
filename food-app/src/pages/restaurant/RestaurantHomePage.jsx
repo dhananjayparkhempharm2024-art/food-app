@@ -16,28 +16,43 @@ const RestaurantHomePage = () => {
     };
     run();
   }, []);
-
-  return (
-    <div>
-      <h2>Restaurant Overview</h2>
+return (
+    <div className="dashboard-container">
+      <h2 className="dashboard-title">Dashboard Overview</h2>
+      
       {restaurant && (
-        <div style={{ marginBottom: 16 }}>
-          <h3>{restaurant.name}</h3>
-          <p>Status: {restaurant.status}</p>
-          <p>{restaurant.address}</p>
+        <div className="restaurant-info-card">
+          <h3 className="res-name">{restaurant.name}</h3>
+          <span className="res-status">{restaurant.status}</span>
+          <p className="res-address">📍 {restaurant.address}</p>
         </div>
       )}
+
       {summary && (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(120px,1fr))", gap: 10 }}>
-          <div>Total Orders: {summary.totalOrders}</div>
-          <div>Delivered: {summary.deliveredOrders}</div>
-          <div>Active: {summary.activeOrders}</div>
-          <div>Revenue: Rs. {summary.totalRevenue}</div>
+        <div className="stats-grid">
+          <div className="stat-card">
+            <span className="stat-label">Total Orders</span>
+            <span className="stat-value">{summary.totalOrders}</span>
+          </div>
+          
+          <div className="stat-card">
+            <span className="stat-label">Delivered</span>
+            <span className="stat-value">{summary.deliveredOrders}</span>
+          </div>
+          
+          <div className="stat-card">
+            <span className="stat-label">Active</span>
+            <span className="stat-value">{summary.activeOrders}</span>
+          </div>
+          
+          <div className="stat-card">
+            <span className="stat-label">Total Revenue</span>
+            <span className="stat-value stat-revenue">Rs. {summary.totalRevenue}</span>
+          </div>
         </div>
       )}
     </div>
   );
 };
-
 export default RestaurantHomePage;
 

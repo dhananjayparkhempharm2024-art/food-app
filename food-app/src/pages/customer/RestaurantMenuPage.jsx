@@ -23,25 +23,35 @@ const RestaurantMenuPage = () => {
       toast.error(error.response?.data?.message || "Unable to add item");
     }
   };
-
-  return (
-    <div>
-      <h2>Restaurant Menu</h2>
-      <div style={{ display: "grid", gap: 10 }}>
+return (
+    <div className="menu-container">
+      <h2 className="menu-header">Restaurant Menu</h2>
+      <div className="menu-grid">
         {menu.map((item) => (
-          <div key={item.id} style={{ border: "1px solid #e5e7eb", padding: 12, borderRadius: 8 }}>
-            <h4 style={{ margin: 0 }}>{item.name}</h4>
-            <p style={{ margin: "6px 0" }}>{item.description}</p>
-            <p style={{ margin: "6px 0" }}>Price: Rs. {item.price}</p>
-            <button disabled={!item.available} onClick={() => handleAdd(item.id)}>
-              {item.available ? "Add to Cart" : "Out of Stock"}
-            </button>
+          <div 
+            key={item.id} 
+            className={`menu-item-card ${!item.available ? 'out-of-stock-card' : ''}`}
+          >
+            <div>
+              <h4 className="menu-item-name">{item.name}</h4>
+              <p className="menu-item-description">{item.description}</p>
+            </div>
+            
+            <div className="menu-item-footer">
+              <span className="menu-item-price">Rs. {item.price}</span>
+              <button 
+                className="add-btn"
+                disabled={!item.available} 
+                onClick={() => handleAdd(item.id)}
+              >
+                {item.available ? "Add to Cart" : "Sold Out"}
+              </button>
+            </div>
           </div>
         ))}
       </div>
     </div>
   );
 };
-
 export default RestaurantMenuPage;
 
